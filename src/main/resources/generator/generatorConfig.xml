@@ -20,14 +20,14 @@
                         password="${spring.datasource.password}">
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="com.trasen.tsrelease.model" targetProject="src/main/java"/>
+        <javaModelGenerator targetPackage="com.transen.tsrelease.model" targetProject="src/main/java"/>
 
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
 
-        <javaClientGenerator targetPackage="com.trasen.tsrelease.dao" targetProject="src/main/java"
+        <javaClientGenerator targetPackage="com.transen.tsrelease.dao" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="tb_weixin_customer">
+        <table tableName="tb_mod_rely">
             <!--mysql 配置-->
             <generatedKey column="pkid" sqlStatement="Mysql" identity="true"/>
             <!--oracle 配置-->

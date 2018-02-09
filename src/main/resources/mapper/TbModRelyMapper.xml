@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.transen.tsrelease.dao.TbModRelyMapper">
+  <resultMap id="BaseResultMap" type="com.transen.tsrelease.model.TbModRely">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" jdbcType="INTEGER" property="pkid" />
+    <result column="pre_mod_id" jdbcType="INTEGER" property="preModId" />
+    <result column="pre_mod_name" jdbcType="VARCHAR" property="preModName" />
+    <result column="pre_versionId" jdbcType="INTEGER" property="preVersionid" />
+    <result column="pre_version" jdbcType="VARCHAR" property="preVersion" />
+    <result column="mod_version_id" jdbcType="INTEGER" property="modVersionId" />
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.trasen.tsrelease.model.TbModRely">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" jdbcType="INTEGER" property="pkid" />
+    <result column="pre_mod_id" jdbcType="INTEGER" property="preModId" />
+    <result column="pre_mod_name" jdbcType="VARCHAR" property="preModName" />
+    <result column="pre_versionId" jdbcType="INTEGER" property="preVersionid" />
+    <result column="pre_version" jdbcType="VARCHAR" property="preVersion" />
+    <result column="mod_version_id" jdbcType="INTEGER" property="modVersionId" />
+  </resultMap>
+</mapper>
