@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.transen.tsrelease.dao.TbProductMapper">
-    <resultMap id="BaseResultMap" type="com.transen.tsrelease.model.TbProduct">
-        <!--
-          WARNING - @mbg.generated
-        -->
-        <id column="pkid" property="pkid" jdbcType="INTEGER"/>
-        <result column="parent" property="parent" jdbcType="INTEGER"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="type" property="type" jdbcType="VARCHAR"/>
-        <result column="level" property="level" jdbcType="INTEGER"/>
-        <result column="dep_id" property="depId" jdbcType="VARCHAR"/>
-        <result column="dep_name" property="depName" jdbcType="VARCHAR"/>
-        <result column="created" property="created" jdbcType="TIMESTAMP"/>
-        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
-        <result column="operator" property="operator" jdbcType="VARCHAR"/>
-    </resultMap>
+
 
     <insert id="insert" parameterType="com.transen.tsrelease.model.TbProduct">
         insert into tb_product
@@ -44,4 +30,12 @@
 
         </trim>
     </insert>
+
+    <select id="selectProParent" resultType="com.transen.tsrelease.model.TbProduct">
+        select * from tb_product where parent is null and is_vaild=1 limit 1
+    </select>
+
+    <select id="selectProTree" resultType="com.transen.tsrelease.model.TbProduct" parameterType="Integer">
+        select * from tb_product where parent=#{parent} and is_vaild=1
+    </select>
 </mapper>

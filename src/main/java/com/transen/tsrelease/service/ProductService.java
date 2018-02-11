@@ -15,7 +15,7 @@ public class ProductService {
     @Autowired
     private TbProductMapper productMapper;
 
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public int insertProduct(TbProduct product) {
         int i = 0;
         if (product != null) {
@@ -25,9 +25,22 @@ public class ProductService {
     }
 
     public List<TbProduct> selectProduct() {
-//        List<TbProduct> product_list =  productMapper.select();
-//        return product_list;
+        //List<TbProduct> product_list =  productMapper.select();
+      //return product_list;
         return null;
+    }
+
+    public TbProduct selectProParent(){
+        return productMapper.selectProParent();
+    }
+
+    public TbProduct selectProTree(TbProduct tbProduct){
+        List<TbProduct> tbProducts=productMapper.selectProTree(tbProduct.getPkid());
+        if(tbProduct!=null&&tbProducts.size()!=0){
+            tbProduct.setTbProductList(tbProducts);
+            tbProducts.stream().forEach(n-> selectProTree(n));
+        }
+        return tbProduct;
     }
 
 }

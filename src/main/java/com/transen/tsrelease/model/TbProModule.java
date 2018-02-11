@@ -1,7 +1,12 @@
 package com.transen.tsrelease.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
 public class TbProModule {
     private Integer modId;
 
@@ -49,4 +54,8 @@ public class TbProModule {
      * 操作人
      */
     private String operator;
+
+    private Integer isVaild;
+
+
 }
