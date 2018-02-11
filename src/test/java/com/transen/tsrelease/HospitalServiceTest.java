@@ -26,7 +26,7 @@ public class HospitalServiceTest {
     HospitalService hospitalService;
 
     @Test
-    @Rollback(true)
+    @Rollback(false)
     public void selectHospital(){
         Map<String,Object> tem=hospitalService.selectHospital();
         System.out.println(tem.get("success"));

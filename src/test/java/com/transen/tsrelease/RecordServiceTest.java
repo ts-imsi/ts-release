@@ -1,8 +1,6 @@
 package com.transen.tsrelease;
 
 
-import com.transen.tsrelease.service.RecordService;
-import com.transen.tsrelease.model.TbJfRank;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +21,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecordServiceTest {
 
     @Autowired
-    private RecordService recordService;
+//    private RecordService recordService;
 
     @Test
-    @Rollback(true)
+    @Rollback(false)
     public void save(){
-        TbJfRank tbJfRank=new TbJfRank();
-        tbJfRank.setName("资深");
-        tbJfRank.setType("五级");
-        tbJfRank.setPrmScore(10000);
-        tbJfRank.setScore(1000000);
-        tbJfRank.setPx(20);
-        recordService.saveRecordRank(tbJfRank);
+//        TbJfRank tbJfRank=new TbJfRank();
+//        tbJfRank.setName("资深");
+//        tbJfRank.setType("五级");
+//        tbJfRank.setPrmScore(10000);
+//        tbJfRank.setScore(1000000);
+//        tbJfRank.setPx(20);
+//        recordService.saveRecordRank(tbJfRank);
     }
 }

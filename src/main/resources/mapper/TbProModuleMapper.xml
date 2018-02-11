@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.transen.tsrelease.dao.TbProModuleMapper" >
+  <resultMap id="BaseResultMap" type="com.transen.tsrelease.model.TbProModule" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="mod_id" property="modId" jdbcType="INTEGER" />
+    <result column="mod_name" property="modName" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="show_px" property="showPx" jdbcType="INTEGER" />
+    <result column="release_px" property="releasePx" jdbcType="INTEGER" />
+    <result column="version_fix" property="versionFix" jdbcType="VARCHAR" />
+    <result column="pro_id" property="proId" jdbcType="INTEGER" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+  </resultMap>
+
+</mapper>
