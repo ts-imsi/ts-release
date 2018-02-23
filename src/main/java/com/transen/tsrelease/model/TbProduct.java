@@ -59,7 +59,4 @@ public class TbProduct {
 
     private Integer isVaild;
 
-    @Transient
-    private List<TbProduct> tbProductList;
-
 }

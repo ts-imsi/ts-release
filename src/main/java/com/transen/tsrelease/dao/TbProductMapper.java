@@ -9,4 +9,5 @@ public interface TbProductMapper extends MyMapper<TbProduct> {
     int insert(TbProduct product);
     TbProduct selectProParent();
     List<TbProduct> selectProTree(Integer parent);
+    List<TbProduct> selectProList(Integer parent);
 }

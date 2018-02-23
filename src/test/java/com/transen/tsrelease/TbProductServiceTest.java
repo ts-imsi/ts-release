@@ -26,7 +26,5 @@ public class TbProductServiceTest {
     @Test
     public void selectProTree(){
         TbProduct tbProduct=productService.selectProParent();
-        TbProduct tbProduct1=productService.selectProTree(tbProduct);
-        System.out.println(tbProduct1.getName());
     }
 }

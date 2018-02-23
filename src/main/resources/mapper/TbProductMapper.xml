@@ -38,4 +38,8 @@
     <select id="selectProTree" resultType="com.transen.tsrelease.model.TbProduct" parameterType="Integer">
         select * from tb_product where parent=#{parent} and is_vaild=1
     </select>
+
+    <select id="selectProList" resultType="com.transen.tsrelease.model.TbProduct" parameterType="Integer">
+        select * from tb_product where parent=#{parent} and `type`='pro' and is_vaild=1
+    </select>
 </mapper>
