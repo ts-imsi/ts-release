@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.transen.tsrelease.dao.TbIndividualityMapper" >
+  <resultMap id="BaseResultMap" type="com.transen.tsrelease.model.TbIndividuality" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" property="pkid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mod_id" property="modId" jdbcType="INTEGER" />
+    <result column="mod_name" property="modName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="hospital" property="hospital" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="getIndividualityList" resultType="com.transen.tsrelease.model.TbIndividuality" parameterType="String">
+    select * from tb_individuality where hospital like CONCAT("%",#{hospitalName},"%")
+  </select>
+</mapper>
