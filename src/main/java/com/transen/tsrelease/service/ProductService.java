@@ -1,12 +1,10 @@
 package com.transen.tsrelease.service;
 
 import com.transen.tsrelease.dao.TbProductMapper;
-import com.transen.tsrelease.model.ProductTreeVo;
+import com.transen.tsrelease.model.TreeVo;
 import com.transen.tsrelease.model.TbProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -39,15 +37,15 @@ public class ProductService {
     /*
     * 查询产品模块树
     * */
-    public ProductTreeVo selectProTree(TbProduct tbProduct){
-        ProductTreeVo productTreeVo=new ProductTreeVo();
+    public TreeVo selectProTree(TbProduct tbProduct){
+        TreeVo productTreeVo=new TreeVo();
         List<TbProduct> tbProducts=productMapper.selectProTree(tbProduct.getPkid());
         if(tbProduct!=null){
-            List<ProductTreeVo> children = new ArrayList<>();
+            List<TreeVo> children = new ArrayList<>();
             productTreeVo.setLabel(tbProduct.getName());
             productTreeVo.setData(tbProduct);
             tbProducts.stream().forEach(n-> {
-                ProductTreeVo proTree=selectProTree(n);
+                TreeVo proTree=selectProTree(n);
                 children.add(proTree);
             });
             productTreeVo.setChildren(children);
@@ -58,15 +56,15 @@ public class ProductService {
     /*
     * 查询产品树
     * */
-    public ProductTreeVo selectProList(TbProduct tbProduct){
-        ProductTreeVo productTreeVo=new ProductTreeVo();
+    public TreeVo selectProList(TbProduct tbProduct){
+        TreeVo productTreeVo=new TreeVo();
         List<TbProduct> tbProducts=productMapper.selectProList(tbProduct.getPkid());
         if(tbProduct!=null){
-            List<ProductTreeVo> children = new ArrayList<>();
+            List<TreeVo> children = new ArrayList<>();
             productTreeVo.setLabel(tbProduct.getName());
             productTreeVo.setData(tbProduct);
             tbProducts.stream().forEach(n-> {
-                ProductTreeVo proTree=selectProList(n);
+                TreeVo proTree=selectProList(n);
                 children.add(proTree);
             });
             productTreeVo.setChildren(children);

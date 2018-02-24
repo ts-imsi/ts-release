@@ -13,10 +13,10 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class ProductTreeVo {
+public class TreeVo {
     private String label;
 
-    private List<ProductTreeVo> children;
+    private List<TreeVo> children;
 
     private Object data;
 }

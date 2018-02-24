@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.transen.tsrelease.common.GlobalCache;
 import com.transen.tsrelease.model.HospitalVo;
+import com.transen.tsrelease.model.TbProduct;
+import com.transen.tsrelease.model.TreeVo;
 import com.transen.tsrelease.util.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,5 +80,20 @@ public class HospitalService {
             hosMap.put("message","jira_hospital变量配置失败");
         }
         return hosMap;
+    }
+
+    public TreeVo selectHospitalTreeList(){
+        TreeVo treeVo=new TreeVo();
+        treeVo.setLabel("个性化库");
+        List<TreeVo> treeVos=new ArrayList<>();
+        List<HospitalVo> hospitalVos=selectHospitalList();
+        hospitalVos.stream().forEach(n->{
+            TreeVo vo=new TreeVo();
+            vo.setLabel(n.getCustomValue());
+            vo.setData(n);
+            treeVos.add(vo);
+        });
+        treeVo.setChildren(treeVos);
+        return treeVo;
     }
 }

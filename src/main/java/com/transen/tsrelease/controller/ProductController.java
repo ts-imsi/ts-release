@@ -1,7 +1,7 @@
 package com.transen.tsrelease.controller;
 
 import cn.trasen.core.entity.Result;
-import com.transen.tsrelease.model.ProductTreeVo;
+import com.transen.tsrelease.model.TreeVo;
 import com.transen.tsrelease.model.TbProduct;
 import com.transen.tsrelease.service.ProductService;
 import org.slf4j.Logger;
@@ -35,8 +35,8 @@ public class ProductController {
         Result result=new Result();
         try{
             TbProduct tbProduct = productService.selectProParent();
-            ProductTreeVo treeVo = productService.selectProTree(tbProduct);
-            List<ProductTreeVo> list = new ArrayList<>();
+            TreeVo treeVo = productService.selectProTree(tbProduct);
+            List<TreeVo> list = new ArrayList<>();
             list.add(treeVo);
             result.setObject(list);
             result.setSuccess(true);
@@ -53,8 +53,8 @@ public class ProductController {
         Result result=new Result();
         try{
             TbProduct tbProduct = productService.selectProParent();
-            ProductTreeVo treeVo = productService.selectProList(tbProduct);
-            List<ProductTreeVo> list = new ArrayList<>();
+            TreeVo treeVo = productService.selectProList(tbProduct);
+            List<TreeVo> list = new ArrayList<>();
             list.add(treeVo);
             result.setObject(list);
             result.setSuccess(true);
@@ -65,4 +65,5 @@ public class ProductController {
         }
         return result;
     }
+
 }
