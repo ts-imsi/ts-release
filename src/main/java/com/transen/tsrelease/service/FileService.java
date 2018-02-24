@@ -105,7 +105,9 @@ public class FileService {
         return fileMap.get(parKey);
     }
 
-    public boolean saveFile(File zipFile){
+    public TbFile saveZipFile(File zipFile){
+        TbFile fileTemp = null;
+        // TODO: 18/2/24 从配置文件取值
         String destUrl = "/Users/zhangxiahui/Downloads/temp/version-file";
         TbFile tbFile = null;
         try {
@@ -115,8 +117,9 @@ public class FileService {
         }
         if(tbFile!=null){
             insertTbFile(tbFile);
+            fileTemp = tbFileMapper.getFileToUrl(tbFile.getUrl());
         }
-        return false;
+        return fileTemp;
     }
 
     public void insertTbFile(TbFile tbFile){
