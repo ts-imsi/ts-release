@@ -40,7 +40,6 @@ public class FileService {
         List<FileHeader> headerList = zFile.getFileHeaders();
         List<File> extractedFileList = new ArrayList<>();
         Map<String,TbFile> fileMap = new HashMap<>();
-        System.out.println(headerList.size());
         for(FileHeader fileHeader : headerList) {
             TbFile tbFile = clonFile(fileHeader);
             fileMap.put(tbFile.getUrl(),tbFile);
@@ -105,9 +104,14 @@ public class FileService {
         return fileMap.get(parKey);
     }
 
-    public TbFile saveZipFile(File zipFile){
+    public TbFile saveZipFile(File zipFile,String type){
         TbFile fileTemp = null;
         // TODO: 18/2/24 从配置文件取值
+        //release-file/release-package   发布包路径
+        //release-file/version-file      版本包路径
+        //release-file/private-file      个性化包路径
+        //release-file/public-file       公共包路径
+        //release-file/interface-file    接口文件路径
         String destUrl = "/Users/zhangxiahui/Downloads/temp/version-file";
         TbFile tbFile = null;
         try {

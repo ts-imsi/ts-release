@@ -38,7 +38,7 @@ public class FileServiceTest {
     @Rollback(false)
     public void saveFile(){
         File file = new File("/Users/zhangxiahui/Downloads/temp/打包平台.zip");
-        fileService.saveZipFile(file);
+        fileService.saveZipFile(file,"version-file");
         System.out.println("完成");
     }
 }
