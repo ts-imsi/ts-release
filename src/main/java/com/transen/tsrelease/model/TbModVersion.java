@@ -1,7 +1,12 @@
 package com.transen.tsrelease.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Setter
+@Getter
 public class TbModVersion {
     /**
      * 自增主键
@@ -12,6 +17,11 @@ public class TbModVersion {
      * 版本类型(增量：increment；里程碑：milepost)
      */
     private String versionType;
+
+    /**
+     * 版本号
+     */
+    private String version;
 
     /**
      * 需求处理起始时间
@@ -57,5 +67,6 @@ public class TbModVersion {
      * 操作人
      */
     private String operator;
+
 
 }

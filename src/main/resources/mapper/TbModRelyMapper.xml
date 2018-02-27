@@ -1,34 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.transen.tsrelease.dao.TbModRelyMapper">
-  <resultMap id="BaseResultMap" type="com.transen.tsrelease.model.TbModRely">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="pkid" jdbcType="INTEGER" property="pkid" />
-    <result column="pre_mod_id" jdbcType="INTEGER" property="preModId" />
-    <result column="pre_mod_name" jdbcType="VARCHAR" property="preModName" />
-    <result column="pre_versionId" jdbcType="INTEGER" property="preVersionid" />
-    <result column="pre_version" jdbcType="VARCHAR" property="preVersion" />
-    <result column="mod_version_id" jdbcType="INTEGER" property="modVersionId" />
-  </resultMap>
 
-
-  <insert id="insertSelective" parameterType="com.transen.tsrelease.model.TbModRely">
-    insert into tb_mod_rely
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="pre_mod_name!=null">`pre_mod_name`,</if>
-      <if test="pre_versionId!=null">pre_versionId,</if>
-      <if test="pre_version!=null">pre_version,</if>
-      <if test="mod_version_id!=null">`mod_version_id`,</if>
-    </trim>
-    <trim prefix="values(" suffix=")" suffixOverrides=",">
-      <if test="name!=null">#{name, jdbcType=VARCHAR},</if>
-      <if test="score!=null">#{score, jdbcType=INTEGER},</if>
-      <if test="prmScore!=null">#{prmScore, jdbcType=INTEGER},</if>
-      <if test="type!=null">#{type, jdbcType=VARCHAR},</if>
-      <if test="px!=null">#{px, jdbcType=INTEGER},</if>
-    </trim>
+    <insert id="insertSelective" parameterType="com.transen.tsrelease.model.TbModRely">
+    insert into tb_mod_rely(pre_mod_id, `pre_mod_name`, pre_versionId, pre_version,`mod_version_id`) VALUES (#{preModId}, #{preModName},#{preVersionid},#{preVersion},#{modVersionId})
   </insert>
 
+    <delete id="deletive" parameterType="int">
+        delete from tb_mod_rely where pkid=#{pkid}
+    </delete>
+
+    <select id="selective" resultType="com.transen.tsrelease.model.TbModRely">
+        select * from tb_mod_rely
+    </select>
+
+    <update id="updative" parameterType="com.transen.tsrelease.model.TbModRely">
+        UPDATE tb_mod_rely set pre_mod_name=#{preModName} where pkid=#{pkid}
+    </update>
 </mapper>
