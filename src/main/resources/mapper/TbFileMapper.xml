@@ -18,5 +18,8 @@
     (#{name},#{pId},#{pName},#{type},#{size},#{url},#{level},now(),#{operator})
   </insert>
 
-
+ <insert id="saveFileOneByPkid" parameterType="com.transen.tsrelease.model.TbFile" useGeneratedKeys="true" keyProperty="pkid">
+    insert into tb_file (`name`,p_id,p_name,`type`,`size`,url,`level`,created,operator) values
+    (#{name},#{pId},#{pName},#{type},#{size},#{url},#{level},now(),#{operator})
+ </insert>
 </mapper>

@@ -12,4 +12,6 @@ public interface TbFileMapper extends MyMapper<TbFile> {
     TbFile getFileToUrl(String url);
 
     void saveFileOne(TbFile tbFile);
+
+    void saveFileOneByPkid(TbFile tbFile);
 }

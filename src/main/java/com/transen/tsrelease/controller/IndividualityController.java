@@ -1,18 +1,21 @@
 package com.transen.tsrelease.controller;
 
+import cn.trasen.core.entity.Result;
 import com.github.pagehelper.PageInfo;
+import com.transen.tsrelease.model.TbFile;
 import com.transen.tsrelease.model.TbIndividuality;
+import com.transen.tsrelease.service.FileService;
 import com.transen.tsrelease.service.IndividualityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * @author luoyun
@@ -28,6 +31,7 @@ public class IndividualityController {
 
     @Autowired
     IndividualityService individualityService;
+
 
     @PostMapping(value="/getIndividualityList")
     public Map<String,Object> getIndividualityList(@RequestBody Map<String,String> param){
@@ -50,6 +54,40 @@ public class IndividualityController {
             logger.error("数据查询失败"+e.getMessage(),e);
             result.put("success",false);
             result.put("message","数据查询失败");
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "IndividualityUpload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Result upload (@RequestParam(value = "files") MultipartFile[] files,
+                          HttpServletRequest request, HttpServletResponse response) {
+        Result result = new Result();
+        try {
+            Optional<String> reOp=Optional.ofNullable(request.getParameter("remark"));
+            Optional<String> nameOp=Optional.ofNullable(request.getParameter("name"));
+            Optional<String> modIdOp=Optional.ofNullable(request.getParameter("modId"));
+            Optional<String> modNameOp=Optional.ofNullable(request.getParameter("modName"));
+            Optional<String> hospitalNameOp=Optional.ofNullable(request.getParameter("hospital"));
+            Optional<String> typeOp=Optional.ofNullable(request.getParameter("fileType"));
+            TbIndividuality tbIndividuality=new TbIndividuality();
+
+            tbIndividuality.setName(nameOp.get());
+            tbIndividuality.setCreated(new Date());
+            tbIndividuality.setModId(Integer.valueOf(modIdOp.get()));
+            tbIndividuality.setModName(modNameOp.get());
+            tbIndividuality.setHospital(hospitalNameOp.get());
+            tbIndividuality.setRemark(reOp.get());
+            boolean boo=individualityService.saveFileAndInviduality(files,typeOp.get(),tbIndividuality);
+            if(boo){
+                result.setMessage("数据保存成功");
+                result.setSuccess(true);
+            }else{
+                result.setMessage("数据保存失败");
+                result.setSuccess(false);
+            }
+        } catch (Exception e) {
+            result.setMessage("数据保存失败");
+            result.setSuccess(false);
         }
         return result;
     }

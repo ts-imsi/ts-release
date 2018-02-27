@@ -20,4 +20,8 @@
   <select id="getIndividualityList" resultType="com.transen.tsrelease.model.TbIndividuality" parameterType="String">
     select * from tb_individuality where hospital like CONCAT("%",#{hospitalName},"%")
   </select>
+
+  <insert id="saveIndividuality" parameterType="com.transen.tsrelease.model.TbIndividuality">
+     insert into tb_individuality(`name`,mod_id,mod_name,remark,file_id,created,updated,operator,hospital,`size`) values(#{name},#{modId},#{modName},#{remark},#{fileId},#{created},#{updated},#{operator},#{hospital},#{size})
+  </insert>
 </mapper>

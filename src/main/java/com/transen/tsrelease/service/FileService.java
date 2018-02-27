@@ -5,10 +5,19 @@ import com.transen.tsrelease.model.TbFile;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.beans.Transient;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.*;
 
 /**
@@ -17,8 +26,13 @@ import java.util.*;
 @Service
 public class FileService {
 
+    private final static Logger logger = LoggerFactory.getLogger(FileService.class);
+
     @Autowired
     TbFileMapper tbFileMapper;
+
+    @Autowired
+    Environment env;
 
     /**
      * 解压指定的ZIP压缩文件
@@ -150,6 +164,48 @@ public class FileService {
         }
 
 
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public TbFile saveFileOne(MultipartFile file,String type){
+        TbFile tbFile=new TbFile();
+        String fileName=null;
+        String filePath=null;
+        try{
+            // 获取文件名
+             fileName = file.getOriginalFilename();
+            // 获取的扩展名
+            String extensionName = StringUtils.substringAfter(fileName, ".");
+            // 数据库保存的目录
+            // 文件路径
+            filePath = env.getProperty("saveFileUrl");
+            filePath=filePath+type;
+            logger.info("文件保存路径为:"+filePath);
+
+            File dest = new File(filePath, fileName);
+            if (!dest.getParentFile().exists()) {
+                dest.getParentFile().mkdirs();
+            }
+            byte[] bytes = file.getBytes();
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(dest));
+            stream.write(bytes);
+            stream.close();
+        }catch (Exception e){
+            logger.error("文件存储失败"+e.getMessage(),e);
+            return tbFile;
+        }
+        tbFile.setName(fileName);
+        tbFile.setCreated(new Date());
+        tbFile.setSize(file.getSize());
+        tbFile.setLevel(0);
+        tbFile.setType(type);
+        //todo 鉴权
+        tbFile.setOperator("system");
+        tbFile.setUrl(filePath+"/"+fileName);
+        if(tbFile!=null){
+            tbFileMapper.saveFileOneByPkid(tbFile);
+        }
+        return tbFile;
     }
 
 
