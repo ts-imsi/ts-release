@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @EnableTransactionManagement
 @SpringBootApplication
-@MapperScan(basePackages = "com.transen.tsrelease.dao")
+@MapperScan(basePackages = "cn.trasen.tsrelease.dao")
 public class Application implements CommandLineRunner {
     private Logger logger = LoggerFactory.getLogger(Application.class);
 
