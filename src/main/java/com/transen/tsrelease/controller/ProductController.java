@@ -1,7 +1,7 @@
 package com.transen.tsrelease.controller;
 
 import cn.trasen.core.entity.Result;
-import com.transen.tsrelease.model.TreeVo;
+import com.transen.tsrelease.model.ProductTreeVo;
 import com.transen.tsrelease.model.TbProduct;
 import com.transen.tsrelease.service.ProductService;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2018/2/23
  */
 @RestController
-@RequestMapping(value="/product")
+@RequestMapping(value = "/product")
 public class ProductController {
 
 
@@ -30,40 +30,112 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @PostMapping(value="/getProductTree")
-    public Result getProductTree(){
-        Result result=new Result();
-        try{
+    @PostMapping(value = "/getProductTree")
+    public Result getProductTree() {
+        Result result = new Result();
+        try {
             TbProduct tbProduct = productService.selectProParent();
             TreeVo treeVo = productService.selectProTree(tbProduct);
             List<TreeVo> list = new ArrayList<>();
             list.add(treeVo);
             result.setObject(list);
             result.setSuccess(true);
-        }catch (Exception e){
-            logger.error("产品模块树查询失败"+e.getMessage(),e);
+        } catch (Exception e) {
+            logger.error("产品模块树查询失败" + e.getMessage(), e);
             result.setSuccess(false);
             result.setMessage("产品模块树查询失败");
         }
         return result;
     }
 
-    @PostMapping(value="/selectProList")
-    public Result selectProList(){
-        Result result=new Result();
-        try{
+    @PostMapping(value = "/selectProList")
+    public Result selectProList() {
+        Result result = new Result();
+        try {
             TbProduct tbProduct = productService.selectProParent();
             TreeVo treeVo = productService.selectProList(tbProduct);
             List<TreeVo> list = new ArrayList<>();
             list.add(treeVo);
             result.setObject(list);
             result.setSuccess(true);
-        }catch (Exception e){
-            logger.error("产品树查询失败"+e.getMessage(),e);
+        } catch (Exception e) {
+            logger.error("产品树查询失败" + e.getMessage(), e);
             result.setSuccess(false);
             result.setMessage("产品树查询失败");
         }
         return result;
+    }
+
+    @PostMapping(value = "/selectModList")
+    public Map<String, Object> selectModList(@RequestBody Map<String, String> params) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        if (params.get("page") == null || params.get("rows") == null) {
+            param.put("messges", "参数错误");
+            param.put("success", false);
+            return param;
+        }
+        TbProduct product = new TbProduct();
+        product.setType(params.get("type"));
+        // name 在此做模糊查询用
+        if (params.get("name") != null) {
+            product.setName(params.get("name"));
+            product.setType(null);
+        }
+        PageInfo<TbProduct> mod_list = productService.selectProduct(Integer.valueOf(params.get("page")), Integer.valueOf(params.get("rows")), product);
+        param.put("数据查询条数", mod_list.getSize());
+        param.put("totalPages", mod_list.getPages());
+        param.put("pageNo", mod_list.getPageNum());
+        param.put("totalCount", mod_list.getTotal());
+        param.put("pageSize", mod_list.getPageSize());
+        param.put("list", mod_list.getList());
+        param.put("success", true);
+        return param;
+    }
+
+    @PostMapping("/deletePro")
+    public Map<String, Object> deletePro(@RequestBody TbProduct tbProduct) {
+        Map<String, Object> param = new HashMap<String, Object>();
+
+        param.put("pkid", tbProduct.getPkid());
+        param.put("success", true);
+        param.put("messges", "删除成功");
+        return param;
+    }
+
+    /**
+     * 负责查询 产品和模块
+     */
+    @PostMapping("/selectProMod")
+    public Map<String, Object> selectProMod(@RequestBody Map<String, String> params) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        if (params.get("type") == null) {
+            param.put("messges", "参数错误");
+            param.put("success", false);
+            return param;
+        }
+        TbProduct product = new TbProduct();
+        product.setType(params.get("type"));
+        if (params.get("parent") != null) {
+            product.setParent(Integer.valueOf(params.get("parent")));
+        }
+        List<TbProduct> proModList = productService.selectProduct(product);
+        param.put("proModList", proModList);
+        param.put("success", true);
+        param.put("messges", "查询成功");
+        return param;
+    }
+
+    /**
+     * 产品新增或编辑
+     */
+    public void updateProMod(@RequestBody Map<String, String> params){
+        params.get("pkid");
+        params.get("parent");
+        params.get("name");
+        params.get("type");
+        params.get("level");
+        params.get("dep_id");
+        params.get("dep_name");
     }
 
 }

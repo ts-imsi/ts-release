@@ -42,4 +42,22 @@
     <select id="selectProList" resultType="com.transen.tsrelease.model.TbProduct" parameterType="Integer">
         select * from tb_product where parent=#{parent} and `type`='pro' and is_vaild=1
     </select>
+
+    <update parameterType="com.transen.tsrelease.model.TbProduct" id="updateSelective">
+        update tb_product set parent=#{parent} ,`name`=#{name},`type`=#{type},`level`=#{level},dep_id=#{depId},dep_name=#{depName},updated=#{updated},operator=#{operator},created=#{created},is_vaild=#{isVaild} where pkid=#{pkid}
+    </update>
+
+    <delete id="deleteProduct" parameterType="int">
+        delete from tb_product where pkid=#{pkid}
+    </delete>
+
+    <select id="selective" resultType="com.transen.tsrelease.model.TbProduct"
+            parameterType="com.transen.tsrelease.model.TbProduct">
+        select * from tb_product
+        <where>
+            <if test="type !=null ">`type`=#{type}</if>
+            <if test="name !=null ">or `name` like concat('%',#{name},'%') or dep_name like concat('%',#{name},'%')</if>
+            <if test="parent !=null">and parent=#{parent}</if>
+        </where>
+    </select>
 </mapper>
