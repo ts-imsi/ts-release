@@ -1,8 +1,10 @@
 package com.transen.tsrelease.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.transen.tsrelease.dao.TbProductMapper;
-import com.transen.tsrelease.model.TreeVo;
 import com.transen.tsrelease.model.TbProduct;
+import com.transen.tsrelease.model.TreeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +26,15 @@ public class ProductService {
         return i;
     }
 
-    public List<TbProduct> selectProduct() {
-        //List<TbProduct> product_list =  productMapper.select();
-      //return product_list;
-        return null;
+    /**
+     * 模糊查询模块和 分页查看模块
+     */
+
+    public PageInfo<TbProduct> selectProduct(int page, int rows, TbProduct product) {
+        PageHelper.startPage(page, rows);
+        List<TbProduct> product_list = productMapper.selective(product);
+        PageInfo<TbProduct> pagehelper = new PageInfo<TbProduct>(product_list);
+        return pagehelper;
     }
 
     public TbProduct selectProParent(){
@@ -70,5 +77,22 @@ public class ProductService {
             productTreeVo.setChildren(children);
         }
         return productTreeVo;
+    }
+
+    public int updateProduct(TbProduct tbProduct) {
+        int i = productMapper.updateSelective(tbProduct);
+        return i;
+    }
+
+    public int deleteProduct(TbProduct tbProduct) {
+        int i = productMapper.deleteProduct(tbProduct.getPkid());
+        return i;
+    }
+
+    /**
+     * 查询产品树和模块
+     */
+    public List<TbProduct> selectProduct(TbProduct product) {
+        return productMapper.selective(product);
     }
 }

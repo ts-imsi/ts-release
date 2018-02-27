@@ -1,18 +1,21 @@
 package com.transen.tsrelease.controller;
 
 import cn.trasen.core.entity.Result;
-import com.transen.tsrelease.model.ProductTreeVo;
+import com.github.pagehelper.PageInfo;
 import com.transen.tsrelease.model.TbProduct;
+import com.transen.tsrelease.model.TreeVo;
 import com.transen.tsrelease.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static org.bouncycastle.asn1.ua.DSTU4145NamedCurves.params;
 
 /**
  * @author luoyun
@@ -70,7 +73,7 @@ public class ProductController {
     public Map<String, Object> selectModList(@RequestBody Map<String, String> params) {
         Map<String, Object> param = new HashMap<String, Object>();
         if (params.get("page") == null || params.get("rows") == null) {
-            param.put("messges", "参数错误");
+            param.put("message", "参数错误");
             param.put("success", false);
             return param;
         }
@@ -98,7 +101,7 @@ public class ProductController {
 
         param.put("pkid", tbProduct.getPkid());
         param.put("success", true);
-        param.put("messges", "删除成功");
+        param.put("message", "删除成功");
         return param;
     }
 
@@ -109,7 +112,7 @@ public class ProductController {
     public Map<String, Object> selectProMod(@RequestBody Map<String, String> params) {
         Map<String, Object> param = new HashMap<String, Object>();
         if (params.get("type") == null) {
-            param.put("messges", "参数错误");
+            param.put("message", "参数错误");
             param.put("success", false);
             return param;
         }
@@ -126,16 +129,30 @@ public class ProductController {
     }
 
     /**
-     * 产品新增或编辑
+     * 产品编辑
      */
-    public void updateProMod(@RequestBody Map<String, String> params){
-        params.get("pkid");
-        params.get("parent");
-        params.get("name");
-        params.get("type");
-        params.get("level");
-        params.get("dep_id");
-        params.get("dep_name");
+    @PostMapping("/updateProduct")
+    public Map<String, Object> updatePro(@RequestBody TbProduct product) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        int i = 0;
+        String message = "";
+        if (product.getPkid() != null) {
+            product.setUpdated(new Date());
+            i = productService.updateProduct(product);
+            message = "修改";
+        } else {
+            product.setCreated(new Date());
+            i = productService.insertProduct(product);
+            message = "新增";
+        }
+        if (i > 0) {
+            param.put("success", true);
+            param.put("message", message + "成功");
+        } else {
+            param.put("success", false);
+            param.put("message", message + "失败");
+        }
+        return param;
     }
 
 }
