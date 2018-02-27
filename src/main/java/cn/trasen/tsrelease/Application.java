@@ -31,7 +31,7 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-       // attenceBootstrap.startService();
+        attenceBootstrap.startService();
         logger.info("服务启动完成!");
     }
 }

@@ -1,5 +1,7 @@
 package cn.trasen.tsrelease.service;
 
+import cn.trasen.tsrelease.dao.TbProModuleMapper;
+import cn.trasen.tsrelease.model.TbProModule;
 import cn.trasen.tsrelease.model.TreeVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -16,6 +18,9 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private TbProductMapper productMapper;
+
+    @Autowired
+    TbProModuleMapper tbProModuleMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public int insertProduct(TbProduct product) {
@@ -77,6 +82,10 @@ public class ProductService {
             productTreeVo.setChildren(children);
         }
         return productTreeVo;
+    }
+
+    public List<TbProModule> getProModuleList(){
+        return tbProModuleMapper.getProModuleList();
     }
 
     public int updateProduct(TbProduct tbProduct) {

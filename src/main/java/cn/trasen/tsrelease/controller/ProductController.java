@@ -1,6 +1,7 @@
 package cn.trasen.tsrelease.controller;
 
 import cn.trasen.core.entity.Result;
+import cn.trasen.tsrelease.model.TbProModule;
 import cn.trasen.tsrelease.model.TreeVo;
 import com.github.pagehelper.PageInfo;
 import cn.trasen.tsrelease.model.TbProduct;
@@ -63,6 +64,21 @@ public class ProductController {
             logger.error("产品树查询失败" + e.getMessage(), e);
             result.setSuccess(false);
             result.setMessage("产品树查询失败");
+        }
+        return result;
+    }
+
+    @PostMapping(value = "/getProModuleList")
+    public Result getProModuleList() {
+        Result result = new Result();
+        try {
+            List<TbProModule> tbProModules=productService.getProModuleList();
+            result.setObject(tbProModules);
+            result.setSuccess(true);
+        } catch (Exception e) {
+            logger.error("模块数据获取失败" + e.getMessage(), e);
+            result.setMessage("模块数据获取失败");
+            result.setSuccess(false);
         }
         return result;
     }
