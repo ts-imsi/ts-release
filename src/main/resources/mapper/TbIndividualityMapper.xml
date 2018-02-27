@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.transen.tsrelease.dao.TbIndividualityMapper" >
-  <resultMap id="BaseResultMap" type="com.transen.tsrelease.model.TbIndividuality" >
+<mapper namespace="cn.trasen.tsrelease.dao.TbIndividualityMapper" >
+  <resultMap id="BaseResultMap" type="cn.trasen.tsrelease.model.TbIndividuality" >
     <!--
       WARNING - @mbg.generated
     -->
@@ -17,11 +17,11 @@
     <result column="hospital" property="hospital" jdbcType="VARCHAR" />
   </resultMap>
 
-  <select id="getIndividualityList" resultType="com.transen.tsrelease.model.TbIndividuality" parameterType="String">
+  <select id="getIndividualityList" resultType="cn.trasen.tsrelease.model.TbIndividuality" parameterType="String">
     select * from tb_individuality where hospital like CONCAT("%",#{hospitalName},"%")
   </select>
 
-  <insert id="saveIndividuality" parameterType="com.transen.tsrelease.model.TbIndividuality">
+  <insert id="saveIndividuality" parameterType="cn.trasen.tsrelease.model.TbIndividuality">
      insert into tb_individuality(`name`,mod_id,mod_name,remark,file_id,created,updated,operator,hospital,`size`) values(#{name},#{modId},#{modName},#{remark},#{fileId},#{created},#{updated},#{operator},#{hospital},#{size})
   </insert>
 </mapper>

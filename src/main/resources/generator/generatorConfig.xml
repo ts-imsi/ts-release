@@ -11,7 +11,7 @@
         <property name="endingDelimiter" value="`"/>
 
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-            <property name="mappers" value="com.transen.tsrelease.util.MyMapper"/>
+            <property name="mappers" value="cn.trasen.tsrelease.util.MyMapper"/>
         </plugin>
 
         <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
@@ -20,11 +20,11 @@
                         password="${spring.datasource.password}">
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="com.transen.tsrelease.model" targetProject="src/main/java"/>
+        <javaModelGenerator targetPackage="cn.trasen.tsrelease.model" targetProject="src/main/java"/>
 
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
 
-        <javaClientGenerator targetPackage="com.transen.tsrelease.dao" targetProject="src/main/java"
+        <javaClientGenerator targetPackage="cn.trasen.tsrelease.dao" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
         <table tableName="tb_mod_version">

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.transen.tsrelease.dao.TbModVersionMapper">
+<mapper namespace="cn.trasen.tsrelease.dao.TbModVersionMapper">
 
-    <insert id="insertive" parameterType="com.transen.tsrelease.model.TbModVersion">
+    <insert id="insertive" parameterType="cn.trasen.tsrelease.model.TbModVersion">
       insert into tb_mod_version(version_type, demand_start, demand_end, demand_num, mod_id, file_id, remark, created, updated, operator) VALUES(#{versionType}, #{demandStart}, #{demandEnd}, #{demandNum}, #{modId}, #{fileId}, #{remark}, #{created}, #{updated}, #{operator})
     </insert>
 
-  <select id="selective" resultType="com.transen.tsrelease.model.TbModVersion">
+  <select id="selective" resultType="cn.trasen.tsrelease.model.TbModVersion">
     select * from tb_mod_version
     <where>
       <if test="modId!=null">mod_id=#{modId}</if>
@@ -14,7 +14,7 @@
     </where>
   </select>
 
-  <update id="updative" parameterType="com.transen.tsrelease.model.TbModVersion">
+  <update id="updative" parameterType="cn.trasen.tsrelease.model.TbModVersion">
     UPDATE tb_mod_version set version_type=#{versionType} where pkid=#{pkid}
   </update>
 

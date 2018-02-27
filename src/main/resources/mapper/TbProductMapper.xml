@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.transen.tsrelease.dao.TbProductMapper">
+<mapper namespace="cn.trasen.tsrelease.dao.TbProductMapper">
 
 
-    <insert id="insert" parameterType="com.transen.tsrelease.model.TbProduct">
+    <insert id="insert" parameterType="cn.trasen.tsrelease.model.TbProduct">
         insert into tb_product
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="parent!=null">`parent`,</if>
@@ -31,19 +31,19 @@
         </trim>
     </insert>
 
-    <select id="selectProParent" resultType="com.transen.tsrelease.model.TbProduct">
+    <select id="selectProParent" resultType="cn.trasen.tsrelease.model.TbProduct">
         select * from tb_product where parent is null and is_vaild=1 limit 1
     </select>
 
-    <select id="selectProTree" resultType="com.transen.tsrelease.model.TbProduct" parameterType="Integer">
+    <select id="selectProTree" resultType="cn.trasen.tsrelease.model.TbProduct" parameterType="Integer">
         select * from tb_product where parent=#{parent} and is_vaild=1
     </select>
 
-    <select id="selectProList" resultType="com.transen.tsrelease.model.TbProduct" parameterType="Integer">
+    <select id="selectProList" resultType="cn.trasen.tsrelease.model.TbProduct" parameterType="Integer">
         select * from tb_product where parent=#{parent} and `type`='pro' and is_vaild=1
     </select>
 
-    <update parameterType="com.transen.tsrelease.model.TbProduct" id="updateSelective">
+    <update parameterType="cn.trasen.tsrelease.model.TbProduct" id="updateSelective">
         update tb_product set parent=#{parent} ,`name`=#{name},`type`=#{type},`level`=#{level},dep_id=#{depId},dep_name=#{depName},updated=#{updated},operator=#{operator},created=#{created},is_vaild=#{isVaild} where pkid=#{pkid}
     </update>
 
@@ -51,8 +51,8 @@
         delete from tb_product where pkid=#{pkid}
     </delete>
 
-    <select id="selective" resultType="com.transen.tsrelease.model.TbProduct"
-            parameterType="com.transen.tsrelease.model.TbProduct">
+    <select id="selective" resultType="cn.trasen.tsrelease.model.TbProduct"
+            parameterType="cn.trasen.tsrelease.model.TbProduct">
         select * from tb_product
         <where>
             <if test="type !=null ">`type`=#{type}</if>
