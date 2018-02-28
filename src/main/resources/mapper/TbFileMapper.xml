@@ -22,4 +22,13 @@
     insert into tb_file (`name`,p_id,p_name,`type`,`size`,url,`level`,created,operator) values
     (#{name},#{pId},#{pName},#{type},#{size},#{url},#{level},now(),#{operator})
  </insert>
+
+    <select id="getFileByPkid" resultType="cn.trasen.tsrelease.model.TbFile" parameterType="java.util.List">
+        select *
+        from tb_file where pkid in
+
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </select>
 </mapper>

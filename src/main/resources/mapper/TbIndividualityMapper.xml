@@ -24,4 +24,8 @@
   <insert id="saveIndividuality" parameterType="cn.trasen.tsrelease.model.TbIndividuality">
      insert into tb_individuality(`name`,mod_id,mod_name,remark,file_id,created,updated,operator,hospital,`size`) values(#{name},#{modId},#{modName},#{remark},#{fileId},#{created},#{updated},#{operator},#{hospital},#{size})
   </insert>
+
+  <select id="getIndividuality" parameterType="Integer" resultType="cn.trasen.tsrelease.model.TbIndividuality">
+    select * from tb_individuality where pkid=#{pkid}
+  </select>
 </mapper>

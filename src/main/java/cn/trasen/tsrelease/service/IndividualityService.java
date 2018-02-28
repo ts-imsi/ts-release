@@ -45,7 +45,7 @@ public class IndividualityService {
         Long size=0L;
         if(files!=null){
             for(MultipartFile file:files){
-                TbFile tbFile=fileService.saveFileOne(file,type);
+                TbFile tbFile=fileService.saveFileOne(file,type,tbIndividuality.getName());
                 if(tbFile!=null){
                     pkid=pkid+tbFile.getPkid()+",";
                     size=tbFile.getSize()+size;
@@ -61,5 +61,9 @@ public class IndividualityService {
         saveIndividuality(tbIndividuality);
         boo=true;
         return boo;
+    }
+
+    public TbIndividuality getIndividuality(Integer pkid){
+        return tbIndividualityMapper.getIndividuality(pkid);
     }
 }

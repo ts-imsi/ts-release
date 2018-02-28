@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by zhangxiahui on 18/2/8.
@@ -166,7 +166,7 @@ public class FileService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public TbFile saveFileOne(MultipartFile file,String type){
+    public TbFile saveFileOne(MultipartFile file,String type,String name){
         TbFile tbFile=new TbFile();
         String fileName=null;
         String filePath=null;
@@ -178,7 +178,7 @@ public class FileService {
             // 数据库保存的目录
             // 文件路径
             filePath = env.getProperty("saveFileUrl");
-            filePath=filePath+type;
+            filePath=filePath+type+"/"+name;
             logger.info("文件保存路径为:"+filePath);
 
             File dest = new File(filePath, fileName);
@@ -205,6 +205,138 @@ public class FileService {
             tbFileMapper.saveFileOneByPkid(tbFile);
         }
         return tbFile;
+    }
+
+    /*
+    * 多文件下载
+    * */
+    public void MultipleFileDown(String name,List<String> urls,String fileType,OutputStream out){
+        InputStream fis=null;
+        String zipFilePath=null;
+        try{
+            String zipBasePath = env.getProperty("saveFileUrl");
+            zipFilePath=zipBasePath+fileType+"/"+name+".zip";
+
+            //创建文件路径的集合，
+            List<String> filePath = urls;
+
+            //根据临时的zip压缩包路径，创建zip文件
+            File zip = new File(zipFilePath);
+            if (!zip.exists()){
+                zip.createNewFile();
+            }
+
+            //创建zip文件输出流
+            FileOutputStream fos = new FileOutputStream(zip);
+            ZipOutputStream zos = new ZipOutputStream(fos);
+
+            //循环读取文件路径集合，获取每一个文件的路径
+            filePath.stream().forEach(n->{
+                File f = new File(n);  //根据文件路径创建文件
+                zipFile(f, zos);  //将每一个文件写入zip文件包内，即进行打包
+            });
+            zos.close();
+            fos.close();
+
+            //将打包后的文件写到客户端，输出的方法同上，使用缓冲流输出
+            fis= new BufferedInputStream(new FileInputStream(zipFilePath));
+            byte[] buff = new byte[4096];
+            int size = 0;
+            while((size=fis.read(buff)) != -1){
+                out.write(buff, 0, size);
+            }
+        }catch (IOException e){
+            logger.error("多个文件下载失败"+e.getMessage(),e);
+        }finally {
+            try{
+                out.flush();
+                out.close();
+                fis.close();
+                new File(zipFilePath).delete();
+            }catch (IOException e){
+                logger.error("流关闭失败"+e.getMessage(),e);
+            }
+
+        }
+    }
+
+    /*
+    * 单文件下载
+    * */
+    public void signFileDown(String urs,OutputStream out){
+        FileInputStream fis=null;
+        BufferedInputStream buff=null;
+        try{
+            File file = new File(urs);  //创建文件
+            fis=new FileInputStream(urs);  //创建文件字节输入流
+            buff=new BufferedInputStream(fis); //创建文件缓冲输入流
+            byte [] b=new byte[2048];  //设置每次读取大小
+            long l=0;  //用于判断是否等同于文件的长度，即文件下载大小
+            while(l<file.length()){  //循环读取文件
+                int j=buff.read(b,0,2048); //使用缓冲流读取数据,返回缓冲区长度
+                l+=j;
+                out.write(b,0,j);//将缓存写入客户端
+            }
+        }catch (IOException e){
+            logger.error("单个文件下载失败"+e.getMessage(),e);
+        }finally {
+            try {
+                out.flush();
+                out.close();
+                fis.close();
+                buff.close();
+            } catch (IOException e) {
+                logger.error("流关闭失败"+e.getMessage(),e);
+            }
+        }
+
+    }
+
+    /*
+    * 封装压缩方法
+    * */
+    public  void zipFile(File inputFile,ZipOutputStream zipoutputStream) {
+        try {
+            if(inputFile.exists()) { //判断文件是否存在
+                if (inputFile.isFile()) {  //判断是否属于文件，还是文件夹
+
+                    //创建输入流读取文件
+                    FileInputStream fis = new FileInputStream(inputFile);
+                    BufferedInputStream bis = new BufferedInputStream(fis);
+
+                    //将文件写入zip内，即将文件进行打包
+                    ZipEntry ze = new ZipEntry(inputFile.getName()); //获取文件名
+                    zipoutputStream.putNextEntry(ze);
+
+                    //写入文件的方法，同上
+                    byte [] b=new byte[1024];
+                    long l=0;
+                    while(l<inputFile.length()){
+                        int j=bis.read(b,0,1024);
+                        l+=j;
+                        zipoutputStream.write(b,0,j);
+                    }
+                    //关闭输入输出流
+                    bis.close();
+                    fis.close();
+                } else {  //如果是文件夹，则使用穷举的方法获取文件，写入zip
+                    try {
+                        File[] files = inputFile.listFiles();
+                        for (int i = 0; i < files.length; i++) {
+                            zipFile(files[i], zipoutputStream);
+                        }
+                    } catch (Exception e) {
+                        logger.error("多文件压缩失败"+e.getMessage(),e);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("多文件压缩失败"+e.getMessage(),e);
+        }
+    }
+
+    public List<TbFile> getTbFileById(List<String> pkid){
+        return tbFileMapper.getFileByPkid(pkid);
     }
 
 
