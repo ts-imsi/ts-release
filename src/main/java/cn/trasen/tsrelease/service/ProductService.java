@@ -46,9 +46,10 @@ public class ProductService {
         return productMapper.selectProParent();
     }
 
-    /*
-    * 查询产品模块树
-    * */
+    /**
+     * @author luoyun
+     * @Description 查询产品模块树
+     */
     public TreeVo selectProTree(TbProduct tbProduct){
         TreeVo productTreeVo=new TreeVo();
         List<TbProduct> tbProducts=productMapper.selectProTree(tbProduct.getPkid());
@@ -65,9 +66,10 @@ public class ProductService {
         return productTreeVo;
     }
 
-    /*
-    * 查询产品树
-    * */
+    /**
+     * @author luoyun
+     * @Description 查询产品树
+     */
     public TreeVo selectProList(TbProduct tbProduct){
         TreeVo productTreeVo=new TreeVo();
         List<TbProduct> tbProducts=productMapper.selectProList(tbProduct.getPkid());

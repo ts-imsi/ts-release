@@ -165,6 +165,15 @@ public class FileService {
 
     }
 
+    /**
+     * @author luoyun
+     * @Description 保存单个文件
+     * @param type 类型
+     *  version-file      版本包路径
+     *  private-file      个性化包路径
+     *  public-file       公共包路径
+     *  interface-file    接口文件路径
+     */
     @Transactional(rollbackFor = Exception.class)
     public TbFile saveFileOne(MultipartFile file,String type,String name){
         TbFile tbFile=new TbFile();
@@ -207,9 +216,17 @@ public class FileService {
         return tbFile;
     }
 
-    /*
-    * 多文件下载
-    * */
+    /**
+     * @author luoyun
+     * @Description 一次性下载多个文件处理
+     * @param fileType 类型
+     *  version-file      版本包路径
+     *  private-file      个性化包路径
+     *  public-file       公共包路径
+     *  interface-file    接口文件路径
+     * @param urls 下载文件路径list集合
+     * @param out response产生的输出流
+     */
     public void MultipleFileDown(String name,List<String> urls,String fileType,OutputStream out){
         InputStream fis=null;
         String zipFilePath=null;
@@ -260,9 +277,12 @@ public class FileService {
         }
     }
 
-    /*
-    * 单文件下载
-    * */
+    /**
+     * @author luoyun
+     * @Description 单文件下载
+     * @param urs 文件路径
+     * @param out response产生的输出流
+     */
     public void signFileDown(String urs,OutputStream out){
         FileInputStream fis=null;
         BufferedInputStream buff=null;
@@ -292,9 +312,10 @@ public class FileService {
 
     }
 
-    /*
-    * 封装压缩方法
-    * */
+    /**
+     * @author luoyun
+     * @Description 压缩文件
+     */
     public  void zipFile(File inputFile,ZipOutputStream zipoutputStream) {
         try {
             if(inputFile.exists()) { //判断文件是否存在
@@ -335,6 +356,10 @@ public class FileService {
         }
     }
 
+    /**
+     * @author luoyun
+     * @Description 通过主键批量查询文件
+     */
     public List<TbFile> getTbFileById(List<String> pkid){
         return tbFileMapper.getFileByPkid(pkid);
     }

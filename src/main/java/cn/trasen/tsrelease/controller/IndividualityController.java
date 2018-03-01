@@ -41,7 +41,11 @@ public class IndividualityController {
     @Autowired
     FileService fileService;
 
-
+    /**
+     * @author luoyun
+     * @Description 获取个性化数据，分页
+     * @param param 包括 page 当前页，rows 行数  hospitalName 医院名称
+     */
     @PostMapping(value="/getIndividualityList")
     public Map<String,Object> getIndividualityList(@RequestBody Map<String,String> param){
         Map<String,Object> result=new HashMap<>();
@@ -67,6 +71,10 @@ public class IndividualityController {
         return result;
     }
 
+    /**
+     * @author luoyun
+     * @Description 个性化文件上传，单个或者多个文件
+     */
     @RequestMapping(value = "IndividualityUpload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Result upload (@RequestParam(value = "files") MultipartFile[] files,
                           HttpServletRequest request, HttpServletResponse response) {
@@ -101,7 +109,10 @@ public class IndividualityController {
         return result;
     }
 
-
+    /**
+     * @author luoyun
+     * @Description 个性化文件下载
+     */
     @GetMapping(value="/downloadFile/{pkid}")
     public void downloadFile(@PathVariable Integer pkid, HttpServletRequest request, HttpServletResponse response){
 

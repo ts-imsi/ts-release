@@ -30,6 +30,10 @@ public class AttenceBootstrap {
     @Autowired
     JiraHospitalTask jiraHospitalTask;
 
+    /**
+     * @author luoyun
+     * @Description 创建一个数据池，定时更新数据
+     */
     public  void startService(){
         try {
             final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(9);

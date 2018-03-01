@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author luoyun
  * @ClassName: IntelliJ IDEA
- * @Description: 操作类型
+ * @Description: 医院控制类
  * @date 2018/2/8
  */
 @RestController
@@ -29,6 +29,10 @@ public class HospitalController {
     @Autowired
     HospitalService hospitalService;
 
+    /**
+     * @author luoyun
+     * @Description 查询医院
+     */
     @PostMapping(value="/selectHospitalList")
     public Result selectHospitalList(){
         Result result=new Result();
@@ -44,6 +48,10 @@ public class HospitalController {
         return result;
     }
 
+    /**
+     * @author luoyun
+     * @Description 创建医院树
+     */
     @PostMapping(value="/selectHospitalTreeList")
     public Result selectHospitalTreeList(){
         Result result=new Result();

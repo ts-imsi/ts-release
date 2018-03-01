@@ -32,6 +32,10 @@ public class HospitalService {
 
     private GlobalCache globalCache = GlobalCache.getGlobalCache();
 
+    /**
+     * @author luoyun
+     * @Description 查询医院列表，判断是否有缓存，有缓存就取缓存数据
+     */
     public List<HospitalVo> selectHospitalList(){
         List<HospitalVo> list=new ArrayList<>();
         if(globalCache.getHospMap()==null){
@@ -51,6 +55,10 @@ public class HospitalService {
         return list;
     }
 
+    /**
+     * @author luoyun
+     * @Description 调用ts-connect服务获取医院列表
+     */
     public Map<String,Object> selectHospital(){
         Map<String,Object> hosMap=new HashMap<>();
         String jira_hospital=environment.getProperty("jira_hospital");
@@ -81,6 +89,10 @@ public class HospitalService {
         return hosMap;
     }
 
+    /**
+     * @author luoyun
+     * @Description 医院个性化库树形结构建立
+     */
     public TreeVo selectHospitalTreeList(){
         TreeVo treeVo=new TreeVo();
         treeVo.setLabel("个性化库");

@@ -27,6 +27,10 @@ public class JiraHospitalTask implements Runnable{
     @Autowired
     HospitalService hospitalService;
 
+    /**
+     * @author luoyun
+     * @Description 启动一个线程，更新医院缓存数据
+     */
     @Override
     public void run() {
         logger.info("======================进入缓存定时任务=====================");

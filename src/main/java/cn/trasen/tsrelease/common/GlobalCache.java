@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author luoyun
  * @ClassName: IntelliJ IDEA
- * @Description: 操作类型
+ * @Description: 一个缓存类
  * @date 2018/2/8
  */
 public class GlobalCache {

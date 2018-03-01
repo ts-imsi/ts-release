@@ -32,6 +32,10 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    /**
+     * @author luoyun
+     * @Description 产品模块树
+     */
     @PostMapping(value = "/getProductTree")
     public Result getProductTree() {
         Result result = new Result();
@@ -50,6 +54,10 @@ public class ProductController {
         return result;
     }
 
+    /**
+     * @author luoyun
+     * @Description 产品树查询
+     */
     @PostMapping(value = "/selectProList")
     public Result selectProList() {
         Result result = new Result();
