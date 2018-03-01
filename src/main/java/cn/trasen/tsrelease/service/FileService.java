@@ -167,9 +167,8 @@ public class FileService {
 
     /**
      * @author luoyun
-     * @Description 保存单个文件
+     * @Description 保存单个文件，普通文件的上传，不包含版本包的上传
      * @param type 类型
-     *  version-file      版本包路径
      *  private-file      个性化包路径
      *  public-file       公共包路径
      *  interface-file    接口文件路径
