@@ -5,12 +5,16 @@ import cn.trasen.tsrelease.model.TbFile;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import cn.trasen.tsrelease.model.TbIndividuality;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author luoyun
@@ -21,11 +25,17 @@ import java.util.List;
 @Service
 public class IndividualityService {
 
+    private final static Logger logger = LoggerFactory.getLogger(IndividualityService.class);
+
+
     @Autowired
     TbIndividualityMapper tbIndividualityMapper;
 
     @Autowired
     FileService fileService;
+
+    @Autowired
+    Environment env;
 
     /**
      * @author luoyun
@@ -81,5 +91,33 @@ public class IndividualityService {
      */
     public TbIndividuality getIndividuality(Integer pkid){
         return tbIndividualityMapper.getIndividuality(pkid);
+    }
+
+    public void deleteIndividuality(Integer pkid){
+        tbIndividualityMapper.deleteIndividuality(pkid);
+    }
+
+    /**
+     * @author luoyun
+     * @Description 删除数据和文件信息
+     * @param idList tbFile表主键集合
+     * @param pkid 个性化过程主键
+     * @param type 文件存储个性化文件类型
+     * @param name 个性化过程文件夹名称
+     * @throws  Exception 文件删除失败
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteFileIndividuality(List<String> idList,Integer pkid,String type,String name) throws Exception {
+        boolean boo=true;
+        deleteIndividuality(pkid);
+        idList.stream().forEach(n->fileService.deleteFileByPkid(Integer.valueOf(n)));
+        String url=env.getProperty("saveFileUrl");
+        String filePath=url+type+"/"+name;
+        boo=fileService.deleteDirectory(filePath);
+        if(!boo){
+            logger.error("文件删除失败");
+            throw new Exception("文件删除失败");
+        }
+        return boo;
     }
 }

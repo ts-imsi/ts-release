@@ -31,4 +31,16 @@
         #{item}
         </foreach>
     </select>
+
+    <delete id="deleteFileByList" parameterType="java.util.List">
+        delete
+        from tb_file where pkid in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteFileByPkid" parameterType="Integer">
+        delete from tb_file where pkid=#{pkid}
+    </delete>
 </mapper>

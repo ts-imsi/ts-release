@@ -103,6 +103,7 @@ public class IndividualityController {
                 result.setSuccess(false);
             }
         } catch (Exception e) {
+            logger.error("数据保存失败"+e.getMessage(),e);
             result.setMessage("数据保存失败");
             result.setSuccess(false);
         }
@@ -144,5 +145,34 @@ public class IndividualityController {
         }catch (Exception e){
             logger.error("个性化过程文件下载失败"+e.getMessage(),e);
         }
+    }
+
+    @PostMapping(value="/deleteFile/{pkid}/{fileType}")
+    public Result deleteFile(@PathVariable Integer pkid,@PathVariable String fileType){
+        Result result=new Result();
+        try{
+            TbIndividuality tbIndividuality=individualityService.getIndividuality(pkid);
+            List<TbFile> tbFiles=new ArrayList<>();
+            if(tbIndividuality.getFileId()!=null){
+                String ids=tbIndividuality.getFileId();
+                String[] idArray=ids.split(",");
+                List<String> idList=Arrays.stream(idArray).collect(Collectors.toList());
+                Boolean boo=individualityService.deleteFileIndividuality(idList,tbIndividuality.getPkid(),fileType,tbIndividuality.getName());
+                if(!boo){
+                    result.setMessage("数据删除失败");
+                    result.setSuccess(false);
+                    return result;
+                }
+            }else{
+                individualityService.deleteIndividuality(pkid);
+            }
+            result.setMessage("数据删除成功");
+            result.setSuccess(true);
+        }catch (Exception e){
+            logger.error("数据删除失败"+e.getMessage(),e);
+            result.setMessage("数据删除失败");
+            result.setSuccess(false);
+        }
+        return result;
     }
 }

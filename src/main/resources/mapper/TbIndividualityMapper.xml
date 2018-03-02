@@ -28,4 +28,8 @@
   <select id="getIndividuality" parameterType="Integer" resultType="cn.trasen.tsrelease.model.TbIndividuality">
     select * from tb_individuality where pkid=#{pkid}
   </select>
+
+  <delete id="deleteIndividuality" parameterType="Integer">
+    delete from tb_individuality where pkid=#{pkid}
+  </delete>
 </mapper>

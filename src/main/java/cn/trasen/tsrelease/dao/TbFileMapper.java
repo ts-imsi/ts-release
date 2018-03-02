@@ -17,4 +17,6 @@ public interface TbFileMapper extends MyMapper<TbFile> {
     void saveFileOneByPkid(TbFile tbFile);
 
     List<TbFile> getFileByPkid(List<String> ids);
+
+    void deleteFileByPkid(Integer pkid);
 }
