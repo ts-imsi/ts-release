@@ -8,7 +8,6 @@ import java.util.List;
 public interface TbProModuleMapper extends MyMapper<TbProModule> {
     public int insertive(TbProModule proModule);
     public int deletive(int pkid);
-    public TbProModule selective();
     public int updative(TbProModule proModule);
-    List<TbProModule> getProModuleList();
+    List<TbProModule> getProModuleList(TbProModule proModule);
 }

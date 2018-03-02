@@ -3,7 +3,7 @@
 <mapper namespace="cn.trasen.tsrelease.dao.TbProductMapper">
 
 
-    <insert id="insert" parameterType="cn.trasen.tsrelease.model.TbProduct">
+    <insert id="insert" parameterType="cn.trasen.tsrelease.model.TbProduct" useGeneratedKeys="true" keyProperty="pkid">
         insert into tb_product
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="parent!=null">`parent`,</if>
@@ -55,9 +55,11 @@
             parameterType="cn.trasen.tsrelease.model.TbProduct">
         select * from tb_product
         <where>
-            <if test="type !=null ">`type`=#{type}</if>
-            <if test="name !=null ">or `name` like concat('%',#{name},'%') or dep_name like concat('%',#{name},'%')</if>
+            is_vaild=1
+            <if test="type !=null ">and `type`=#{type}</if>
+            <if test="name !=null ">and `name` like concat('%',#{name},'%') or dep_name like concat('%',#{name},'%')</if>
             <if test="parent !=null">and parent=#{parent}</if>
+            <if test="pkid !=null">and pkid=#{pkid}</if>
         </where>
     </select>
 </mapper>

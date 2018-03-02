@@ -10,15 +10,18 @@
     delete from tb_pro_module where mod_id=#{modId}
   </delete>
 
-  <select id="selective" resultType="cn.trasen.tsrelease.model.TbProModule">
-    select * from tb_pro_module
-  </select>
-
   <update id="updative" parameterType="cn.trasen.tsrelease.model.TbProModule">
-    UPDATE tb_pro_module set mod_name=#{modName} where mod_id=#{modId}
+    UPDATE tb_pro_module set mod_name=#{modName},code=#{code},show_px=#{showPx},release_px=#{releasePx},
+      version_fix=#{versionFix},pro_id=#{proId},created=#{created},updated=#{updated},operator=#{operator},is_vaild=#{isVaild}
+     where mod_id=#{modId}
   </update>
 
   <select id="getProModuleList" resultType="cn.trasen.tsrelease.model.TbProModule">
-    select * from tb_pro_module where is_vaild=1
+    select * from tb_pro_module
+    <where>
+      is_vaild=1
+      <if test="modName!=null">and mod_name like concat('%',#{modName},'%') or code like concat('%',#{modName},'%')</if>
+      <if test="proId != null">and pro_id =#{proId}</if>
+    </where>
   </select>
 </mapper>

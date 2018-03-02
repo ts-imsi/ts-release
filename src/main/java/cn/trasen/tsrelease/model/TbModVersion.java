@@ -68,5 +68,8 @@ public class TbModVersion {
      */
     private String operator;
 
-
+    /**
+     * 模块版本依赖关系
+     */
+    private String mod_rely;
 }

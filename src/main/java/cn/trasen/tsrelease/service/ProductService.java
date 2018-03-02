@@ -87,7 +87,7 @@ public class ProductService {
     }
 
     public List<TbProModule> getProModuleList(){
-        return tbProModuleMapper.getProModuleList();
+        return tbProModuleMapper.getProModuleList(null);
     }
 
     public int updateProduct(TbProduct tbProduct) {
@@ -101,7 +101,7 @@ public class ProductService {
     }
 
     /**
-     * 查询产品树和模块
+     * 查询产品和模块(不分页可模糊查询)
      */
     public List<TbProduct> selectProduct(TbProduct product) {
         return productMapper.selective(product);

@@ -80,7 +80,7 @@ public class ProductController {
     public Result getProModuleList() {
         Result result = new Result();
         try {
-            List<TbProModule> tbProModules=productService.getProModuleList();
+            List<TbProModule> tbProModules = productService.getProModuleList();
             result.setObject(tbProModules);
             result.setSuccess(true);
         } catch (Exception e) {
@@ -117,16 +117,6 @@ public class ProductController {
         return param;
     }
 
-    @PostMapping("/deletePro")
-    public Map<String, Object> deletePro(@RequestBody TbProduct tbProduct) {
-        Map<String, Object> param = new HashMap<String, Object>();
-
-        param.put("pkid", tbProduct.getPkid());
-        param.put("success", true);
-        param.put("message", "删除成功");
-        return param;
-    }
-
     /**
      * 负责查询 产品和模块
      */
@@ -151,19 +141,20 @@ public class ProductController {
     }
 
     /**
-     * 产品编辑
+     * 产品保存
      */
     @PostMapping("/updateProduct")
     public Map<String, Object> updatePro(@RequestBody TbProduct product) {
         Map<String, Object> param = new HashMap<String, Object>();
         int i = 0;
         String message = "";
+        Date date = new Date();
         if (product.getPkid() != null) {
-            product.setUpdated(new Date());
+            product.setUpdated(date);
             i = productService.updateProduct(product);
             message = "修改";
         } else {
-            product.setCreated(new Date());
+            product.setCreated(date);
             i = productService.insertProduct(product);
             message = "新增";
         }
@@ -177,4 +168,33 @@ public class ProductController {
         return param;
     }
 
+    /**
+     * 删除产品 但当存在子模块时，取消删除
+     */
+    @PostMapping("deletePro")
+    public Map<String, Object> updateProVaild(@RequestBody TbProduct product) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        if (product.getPkid() == null) {
+            param.put("message", "参数错误");
+            param.put("success", false);
+            return param;
+        } else {
+            int cout = product.getPkid();// 记录产品主键
+            TbProduct product_new = new TbProduct(); //该产品为了查询子模块个数
+            product_new.setParent(cout);
+            List<TbProduct> moduleList = productService.selectProduct(product_new);
+            cout = moduleList.size();// 统计模块个数
+            if(cout>0){
+                param.put("message", "该产品有"+cout+"个模块，不能删除");
+                param.put("success", false);
+            }else{
+                product.setIsVaild(0);
+                product.setUpdated(new Date());
+                productService.updateProduct(product);
+                param.put("message", "删除成功");
+                param.put("success", true);
+            }
+        }
+        return param;
+    }
 }

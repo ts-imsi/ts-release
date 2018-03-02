@@ -25,6 +25,14 @@ public class ModVersionService {
         return pageinfo;
     }
 
+    /**
+     * 查询版本列表(可以根据mod_id模块查询版本)
+     */
+    public List<TbModVersion> selectModVersion(TbModVersion modVersion){
+        List<TbModVersion> modVersionList =  mapper.selective(modVersion);
+        return modVersionList;
+    }
+
     public int deleteModVersion(TbModVersion modVersion) {
         int i = 0;
         if (modVersion != null) {
