@@ -71,5 +71,5 @@ public class TbModVersion {
     /**
      * 模块版本依赖关系
      */
-    private String mod_rely;
+    private String modRely;
 }

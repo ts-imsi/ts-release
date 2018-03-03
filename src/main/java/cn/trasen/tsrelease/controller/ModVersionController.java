@@ -43,24 +43,4 @@ public class ModVersionController {
         return param;
     }
 
-    @PostMapping(value="/saveModVersion")
-    public int updateModVersison() {
-        // 新增和编辑
-        TbModVersion modVersion = new TbModVersion();
-        modVersionService.updateModVersion(modVersion);
-        return 1;
-    }
-
-    @PostMapping("deleteModVersion")
-    public Map<String, Object> deleteModVersion(@RequestBody TbModVersion modVersion){
-        Map<String, Object> param = new HashMap<String, Object>();
-        if(modVersion!=null){
-
-        }else{
-            param.put("messges", "参数错误");
-            param.put("success", false);
-            return param;
-        }
-        return param;
-    }
 }

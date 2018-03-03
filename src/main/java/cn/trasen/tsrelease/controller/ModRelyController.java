@@ -13,9 +13,6 @@ public class ModRelyController {
     @Autowired
     ModRelyService service;
 
-    public void getModRelyList(){
-        service.select();
-    }
     public int updateModRelyList(){
         TbModRely modRely = new TbModRely();
         service.updateModRely(modRely);

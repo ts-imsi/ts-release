@@ -5,13 +5,15 @@ import cn.trasen.tsrelease.model.TbModRely;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ModRelyService {
     @Autowired
     private TbModRelyMapper modRelyMapper;
 
-    public TbModRely select() {
-        return modRelyMapper.selective();
+    public List<TbModRely> select(TbModRely modRely) {
+        return modRelyMapper.selective(modRely);
     }
 
     public int insertModRely(TbModRely modRely) {

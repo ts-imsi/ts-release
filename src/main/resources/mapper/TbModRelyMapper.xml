@@ -10,8 +10,14 @@
         delete from tb_mod_rely where pkid=#{pkid}
     </delete>
 
-    <select id="selective" resultType="cn.trasen.tsrelease.model.TbModRely">
+    <select id="selective" resultType="cn.trasen.tsrelease.model.TbModRely" parameterType="cn.trasen.tsrelease.model.TbModRely">
         select * from tb_mod_rely
+        <where>
+            <if test="pkid != null">and pkid=#{pkid}</if>
+            <if test="modVersionId != null">and mod_version_id=#{modVersionId}</if>
+            <if test="preModId != null">and pre_mod_id=#{preModId}</if>
+            <if test="preVersionid!=null">and pre_versionId=#{preVersionid}</if>
+        </where>
     </select>
 
     <update id="updative" parameterType="cn.trasen.tsrelease.model.TbModRely">

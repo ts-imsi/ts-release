@@ -9,7 +9,7 @@
   <select id="selective" resultType="cn.trasen.tsrelease.model.TbModVersion">
     select * from tb_mod_version
     <where>
-      <if test="modId!=null">mod_id=#{modId}</if>
+      <if test="modId!=null">and mod_id=#{modId}</if>
       <if test="version!=null"> or version like concat('%',#{version},'%') </if>
     </where>
   </select>
