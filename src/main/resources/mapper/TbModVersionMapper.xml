@@ -14,6 +14,19 @@
     </where>
   </select>
 
+  <select id="getModVBymodId" resultType="cn.trasen.tsrelease.model.TbModVersion" parameterType="java.util.List">
+    select *
+    from tb_mod_version
+    <where>
+      <if test="list!=null">
+        mod_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
   <update id="updative" parameterType="cn.trasen.tsrelease.model.TbModVersion">
     UPDATE tb_mod_version set version_type=#{versionType} where pkid=#{pkid}
   </update>

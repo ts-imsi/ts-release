@@ -12,5 +12,7 @@ public interface TbModVersionMapper extends MyMapper<TbModVersion> {
 
     public List<TbModVersion> selective(TbModVersion modVersion);
 
+    public List<TbModVersion> getModVBymodId(List<Integer> mod_ids);
+
     public int deletive(int pkid);
 }
