@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.trasen.tsrelease.dao.TbPublicFileMapper" >
+  <resultMap id="BaseResultMap" type="cn.trasen.tsrelease.model.TbPublicFile" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" property="pkid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="INTEGER" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="selectPublicFileList" parameterType="String" resultType="cn.trasen.tsrelease.model.TbPublicFile">
+    select * from tb_public_file where 1=1
+    <if test="name!=null">`name` like CONCAT("%",#{name},"%")</if>
+  </select>
+
+  <insert id="savePublicFile" parameterType="cn.trasen.tsrelease.model.TbPublicFile">
+    insert into tb_public_file(`name`,`size`,file_id,remark,operator,created,updated,`type`) values(#{name},#{size},#{fileId},#{remark},#{operator},#{created},#{updated},#{type})
+  </insert>
+</mapper>
