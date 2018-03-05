@@ -99,21 +99,27 @@ public class ProductController {
             param.put("success", false);
             return param;
         }
-        TbProduct product = new TbProduct();
-        product.setType(params.get("type"));
-        // name 在此做模糊查询用
-        if (params.get("name") != null) {
-            product.setName(params.get("name"));
-            product.setType(null);
+        try {
+            TbProduct product = new TbProduct();
+            product.setType(params.get("type"));
+            // name 在此做模糊查询用
+            if (params.get("name") != null) {
+                product.setName(params.get("name"));
+                product.setType(null);
+            }
+            PageInfo<TbProduct> mod_list = productService.selectProduct(Integer.valueOf(params.get("page")), Integer.valueOf(params.get("rows")), product);
+            param.put("数据查询条数", mod_list.getSize());
+            param.put("totalPages", mod_list.getPages());
+            param.put("pageNo", mod_list.getPageNum());
+            param.put("totalCount", mod_list.getTotal());
+            param.put("pageSize", mod_list.getPageSize());
+            param.put("list", mod_list.getList());
+            param.put("success", true);
+        }catch (Exception e) {
+            logger.error("数据获取失败" + e.getMessage(), e);
+            param.put("message","数据获取失败");
+            param.put("success", false);
         }
-        PageInfo<TbProduct> mod_list = productService.selectProduct(Integer.valueOf(params.get("page")), Integer.valueOf(params.get("rows")), product);
-        param.put("数据查询条数", mod_list.getSize());
-        param.put("totalPages", mod_list.getPages());
-        param.put("pageNo", mod_list.getPageNum());
-        param.put("totalCount", mod_list.getTotal());
-        param.put("pageSize", mod_list.getPageSize());
-        param.put("list", mod_list.getList());
-        param.put("success", true);
         return param;
     }
 
@@ -128,15 +134,21 @@ public class ProductController {
             param.put("success", false);
             return param;
         }
-        TbProduct product = new TbProduct();
-        product.setType(params.get("type"));
-        if (params.get("parent") != null) {
-            product.setParent(Integer.valueOf(params.get("parent")));
+        try{
+            TbProduct product = new TbProduct();
+            product.setType(params.get("type"));
+            if (params.get("parent") != null) {
+                product.setParent(Integer.valueOf(params.get("parent")));
+            }
+            List<TbProduct> proModList = productService.selectProduct(product);
+            param.put("proModList", proModList);
+            param.put("success", true);
+            param.put("messges", "查询成功");
+        }catch (Exception e) {
+            logger.error("数据获取失败" + e.getMessage(), e);
+            param.put("message","数据获取失败");
+            param.put("success", false);
         }
-        List<TbProduct> proModList = productService.selectProduct(product);
-        param.put("proModList", proModList);
-        param.put("success", true);
-        param.put("messges", "查询成功");
         return param;
     }
 
@@ -149,21 +161,27 @@ public class ProductController {
         int i = 0;
         String message = "";
         Date date = new Date();
-        if (product.getPkid() != null) {
-            product.setUpdated(date);
-            i = productService.updateProduct(product);
-            message = "修改";
-        } else {
-            product.setCreated(date);
-            i = productService.insertProduct(product);
-            message = "新增";
-        }
-        if (i > 0) {
-            param.put("success", true);
-            param.put("message", message + "成功");
-        } else {
+        try {
+            if (product.getPkid() != null) {
+                product.setUpdated(date);
+                i = productService.updateProduct(product);
+                message = "修改";
+            } else {
+                product.setCreated(date);
+                i = productService.insertProduct(product);
+                message = "新增";
+            }
+            if (i > 0) {
+                param.put("success", true);
+                param.put("message", message + "成功");
+            } else {
+                param.put("success", false);
+                param.put("message", message + "失败");
+            }
+        }catch (Exception e) {
+            logger.error("数据编辑失败" + e.getMessage(), e);
+            param.put("message","数据编辑失败");
             param.put("success", false);
-            param.put("message", message + "失败");
         }
         return param;
     }
@@ -182,19 +200,25 @@ public class ProductController {
             int cout = product.getPkid();// 记录产品主键
             TbProduct product_new = new TbProduct(); //该产品为了查询子模块个数
             product_new.setParent(cout);
-            List<TbProduct> moduleList = productService.selectProduct(product_new);
-            cout = moduleList.size();// 统计模块个数
-            if(cout>0){
-                param.put("message", "该产品有"+cout+"个模块，不能删除");
+            try {
+                List<TbProduct> moduleList = productService.selectProduct(product_new);
+                cout = moduleList.size();// 统计模块个数
+                if (cout > 0) {
+                    param.put("message", "该产品有" + cout + "个模块，不能删除");
+                    param.put("success", false);
+                } else {
+                    product.setIsVaild(0);
+                    product.setUpdated(new Date());
+                    productService.updateProduct(product);
+                    param.put("message", "删除成功");
+                    param.put("success", true);
+                }
+            }catch (Exception e) {
+                logger.error("数据编辑失败" + e.getMessage(), e);
+                param.put("message","数据编辑失败");
                 param.put("success", false);
-            }else{
-                product.setIsVaild(0);
-                product.setUpdated(new Date());
-                productService.updateProduct(product);
-                param.put("message", "删除成功");
-                param.put("success", true);
             }
+            return param;
         }
-        return param;
     }
 }

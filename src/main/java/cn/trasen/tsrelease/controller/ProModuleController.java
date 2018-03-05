@@ -7,6 +7,8 @@ import cn.trasen.tsrelease.service.ModVersionService;
 import cn.trasen.tsrelease.service.ProModuleService;
 import cn.trasen.tsrelease.service.ProductService;
 import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,8 @@ public class ProModuleController {
     @Autowired
     ModVersionService modVersionService;
 
+    private final static Logger logger = LoggerFactory.getLogger(ProductController.class);
+
     @PostMapping("saveProModule")
     public Map<String, Object> saveProModule(@RequestBody TbProModule proModule) {
         Map<String, Object> param = new HashMap<String, Object>();
@@ -44,48 +48,53 @@ public class ProModuleController {
         // 查询父产品的信息
         TbProduct module_parent = new TbProduct();
         module_parent.setPkid(proModule.getProId());
-        List<TbProduct> productList = productService.selectProduct(module_parent);
-        if (productList != null) {
-            module_parent = productList.get(0);
-            // 组装product表的模块
-            TbProduct product_module = new TbProduct();
-            product_module.setPkid(proModule.getModId());
-            product_module.setName(proModule.getModName());
-            product_module.setParent(proModule.getProId());
-            product_module.setType("mod");
-            product_module.setLevel(2);
-            product_module.setDepId(module_parent.getDepId());
-            product_module.setDepName(module_parent.getDepName());
-            product_module.setOperator(proModule.getOperator());
-            product_module.setCreated(proModule.getCreated());
-            product_module.setIsVaild(1);
+        try{
+            List<TbProduct> productList = productService.selectProduct(module_parent);
+            if (productList != null) {
+                module_parent = productList.get(0);
+                // 组装product表的模块
+                TbProduct product_module = new TbProduct();
+                product_module.setPkid(proModule.getModId());
+                product_module.setName(proModule.getModName());
+                product_module.setParent(proModule.getProId());
+                product_module.setType("mod");
+                product_module.setLevel(2);
+                product_module.setDepId(module_parent.getDepId());
+                product_module.setDepName(module_parent.getDepName());
+                product_module.setOperator(proModule.getOperator());
+                product_module.setCreated(proModule.getCreated());
+                product_module.setIsVaild(1);
 
-            // 操作
-            proModule.setIsVaild(1);
-            Date date = new Date();
-            if (proModule.getModId() != null) {
-                product_module.setUpdated(date);
-                proModule.setUpdated(date);
-                i = proModuleService.updateProModule(product_module, proModule);
-                mess = "编辑";
+                // 操作
+                proModule.setIsVaild(1);
+                Date date = new Date();
+                if (proModule.getModId() != null) {
+                    product_module.setUpdated(date);
+                    proModule.setUpdated(date);
+                    i = proModuleService.updateProModule(product_module, proModule);
+                    mess = "编辑";
+                } else {
+                    product_module.setCreated(date);
+                    proModule.setCreated(date);
+                    i = proModuleService.insertProModule(product_module, proModule);
+                    mess = "新增";
+                }
             } else {
-                product_module.setCreated(date);
-                proModule.setCreated(date);
-                i = proModuleService.insertProModule(product_module, proModule);
-                mess = "新增";
+                i = -1;
+                mess = "操作";
             }
-        } else {
-            i = -1;
-            mess = "操作";
-        }
 
-
-        if (i > 0) {
-            param.put("success", true);
-            param.put("message", mess + "模块成功");
-        } else {
+            if (i > 0) {
+                param.put("success", true);
+                param.put("message", mess + "模块成功");
+            } else {
+                param.put("success", false);
+                param.put("message", mess + "模块失败");
+            }
+        }catch (Exception e) {
+            logger.error("数据编辑失败" + e.getMessage(), e);
+            param.put("message","数据编辑失败");
             param.put("success", false);
-            param.put("message", mess + "模块失败");
         }
         return param;
     }
@@ -104,14 +113,20 @@ public class ProModuleController {
         if(params.get("proid")!=null){
             proModule.setProId(Integer.valueOf(params.get("proid")));
         }
-        PageInfo<TbProModule> proModulePageInfo = proModuleService.proModuleList(Integer.valueOf(params.get("page")), Integer.valueOf(params.get("rows")), proModule);
-        param.put("数据查询条数", proModulePageInfo.getSize());
-        param.put("totalPages", proModulePageInfo.getPages());
-        param.put("pageNo", proModulePageInfo.getPageNum());
-        param.put("totalCount", proModulePageInfo.getTotal());
-        param.put("pageSize", proModulePageInfo.getPageSize());
-        param.put("list", proModulePageInfo.getList());
-        param.put("success", true);
+        try {
+            PageInfo<TbProModule> proModulePageInfo = proModuleService.proModuleList(Integer.valueOf(params.get("page")), Integer.valueOf(params.get("rows")), proModule);
+            param.put("数据查询条数", proModulePageInfo.getSize());
+            param.put("totalPages", proModulePageInfo.getPages());
+            param.put("pageNo", proModulePageInfo.getPageNum());
+            param.put("totalCount", proModulePageInfo.getTotal());
+            param.put("pageSize", proModulePageInfo.getPageSize());
+            param.put("list", proModulePageInfo.getList());
+            param.put("success", true);
+        }catch (Exception e) {
+            logger.error("数据查询失败" + e.getMessage(), e);
+            param.put("message","数据查询失败");
+            param.put("success", false);
+        }
         return param;
     }
 
@@ -129,32 +144,38 @@ public class ProModuleController {
             int modId = proModule.getModId();
             TbModVersion modVersion = new TbModVersion();
             modVersion.setModId(modId);
-            List<TbModVersion> modVersionList = modVersionService.selectModVersion(modVersion);
-            if (modVersionList.size() > 0) {
-                // 该模块有版本关联 不予处理
-                param.put("message", "该模块有"+modVersionList.size()+"个版本，不能删除");
-                param.put("success", false);
-                return param;
-            } else {
-                TbProduct module = new TbProduct();
-                module.setPkid(modId);
-                // 查询产品表的模块
-                List<TbProduct> moduleList = productService.selectProduct(module);
-                if (moduleList.size() > 0) {
-                    // 修改两个模块信息
-                    module = moduleList.get(0);
-                    module.setIsVaild(0);
-                    proModule.setIsVaild(0);
-                    int i = proModuleService.updateProModule(module, proModule);
-                    if (i > 0) {
-                        param.put("success", true);
-                        param.put("message", "删除成功");
-                    } else{
-                        param.put("success", false);
-                        param.put("message", "删除失败");
-                    }
+            try {
+                List<TbModVersion> modVersionList = modVersionService.selectModVersion(modVersion);
+                if (modVersionList.size() > 0) {
+                    // 该模块有版本关联 不予处理
+                    param.put("message", "该模块有" + modVersionList.size() + "个版本，不能删除");
+                    param.put("success", false);
                     return param;
+                } else {
+                    TbProduct module = new TbProduct();
+                    module.setPkid(modId);
+                    // 查询产品表的模块
+                    List<TbProduct> moduleList = productService.selectProduct(module);
+                    if (moduleList.size() > 0) {
+                        // 修改两个模块信息
+                        module = moduleList.get(0);
+                        module.setIsVaild(0);
+                        proModule.setIsVaild(0);
+                        int i = proModuleService.updateProModule(module, proModule);
+                        if (i > 0) {
+                            param.put("success", true);
+                            param.put("message", "删除成功");
+                        } else {
+                            param.put("success", false);
+                            param.put("message", "删除失败");
+                        }
+                        return param;
+                    }
                 }
+            }catch (Exception e) {
+                logger.error("数据编辑失败" + e.getMessage(), e);
+                param.put("message","数据编辑失败");
+                param.put("success", false);
             }
         }
 
